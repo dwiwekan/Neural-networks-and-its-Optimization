@@ -21,7 +21,7 @@ This interactive application helps you visualize and understand key machine lear
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/ml-optimization.git
+   git clone https://github.com/dwiwekan/Neural-networks-and-its-Optimization.git ml-optimization
    cd ml-optimization
 
 2.  Create a virtual environment (optional but recommended):
