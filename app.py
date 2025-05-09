@@ -1,102 +1,33 @@
 import streamlit as st
-from nn.model import CNN
-from nn.train import train_model
-from utils.data_processing import load_fashion_mnist
-from utils.plotting import plot_loss, plot_accuracy
-import torch
-import matplotlib.pyplot as plt
-import numpy as np
 
 def main():
-    st.title("👗 Fashion MNIST Classification with CNN")
+    st.title("🧠 Neural Networks & Optimization: Practical Guide")
+
     st.markdown("""
-        This application demonstrates a **Convolutional Neural Network (CNN)** trained to classify images from the **Fashion MNIST dataset**.
+        Welcome to the **Neural Networks and Optimization** interactive guide! 🚀
         
-        You can adjust the hyperparameters from the sidebar and train the model directly from this interface.
+        This app is designed to teach you the fundamentals of Artificial Neural Networks (ANN) and Optimization techniques through interactive examples and visualizations.
+
+        Here's what you can explore:
     """)
 
-    # Sidebar options for customization
-    st.sidebar.header("Model Settings")
-    epochs = st.sidebar.slider("Epochs", 1, 20, 5)
-    learning_rate = st.sidebar.selectbox("Learning Rate", [0.01, 0.001, 0.0001], index=1)
-    batch_size = st.sidebar.selectbox("Batch Size", [32, 64, 128], index=1)
+    st.header("📖 Sections")
 
-    if st.sidebar.button("Start Training 🚀"):
-        # Load Fashion MNIST dataset
-        train_loader, test_loader, class_names = load_fashion_mnist(batch_size)
+    st.markdown("""
+    - **Page 1: ANN Basics**: Learn about the fundamentals of Artificial Neural Networks and interactively visualize forward propagation with simple networks.
+    - **Page 2: Gradient Descent**: Visualize gradient descent on a convex/non-convex function and understand how it converges with different learning rates.
+    - **Page 3: Stochastic & Mini-Batch Gradient Descent**: Explore how stochastic gradient descent and mini-batch methods affect convergence with noisy data.
+    - **Page 4: Gradient Descent Variants (Momentum, RMSProp, Adam)**: Compare different gradient descent variants and see how they perform on complex optimization landscapes.
+    - **Page 5: Challenges in Optimization**: Explore issues like local minima, saddle points, and cliffs, and how to deal with them effectively.
+    """)
 
-        # Instantiate CNN model
-        model = CNN()
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Gradient_descent.svg/320px-Gradient_descent.svg.png", caption="Gradient Descent Example", use_container_width=True)
 
-        # Create placeholders for live updating
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        loss_chart_placeholder = st.empty()
-        accuracy_chart_placeholder = st.empty()
+    st.markdown("""
+    **Interactive Learning**: Each section of the app provides interactive visualizations that update in real-time as you change parameters. This way, you can understand the impact of different choices on the behavior of a model or optimization algorithm.
+    """)
 
-        # Train the model and capture history
-        history = {"train_loss": [], "test_accuracy": []}
-        criterion = torch.nn.CrossEntropyLoss()
-        optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-
-        for epoch in range(epochs):
-            model.train()
-            total_loss = 0
-            for images, labels in train_loader:
-                optimizer.zero_grad()
-                outputs = model(images)
-                loss = criterion(outputs, labels)
-                loss.backward()
-                optimizer.step()
-                total_loss += loss.item()
-
-            avg_loss = total_loss / len(train_loader)
-            accuracy = evaluate_model(model, test_loader)
-
-            history["train_loss"].append(avg_loss)
-            history["test_accuracy"].append(accuracy)
-
-            # Update live progress and charts
-            progress_bar.progress((epoch + 1) / epochs)
-            status_text.text(f"Epoch [{epoch+1}/{epochs}] Loss: {avg_loss:.4f}, Accuracy: {accuracy:.2f}%")
-
-            # Update loss and accuracy charts separately
-            loss_chart_placeholder.pyplot(plot_loss(history["train_loss"]))
-            accuracy_chart_placeholder.pyplot(plot_accuracy(history["test_accuracy"]))
-
-        st.success("🎉 Training Completed Successfully!")
-
-        # Display predictions from test set
-        st.subheader("Sample Predictions")
-        plot_sample_predictions(model, test_loader, class_names)
-
-# Evaluate function to check accuracy
-def evaluate_model(model, test_loader):
-    model.eval()
-    correct = total = 0
-    with torch.no_grad():
-        for images, labels in test_loader:
-            outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-    return (correct / total) * 100
-
-# Plotting sample predictions
-def plot_sample_predictions(model, test_loader, class_names, num_images=6):
-    images, labels = next(iter(test_loader))
-    model.eval()
-    outputs = model(images)
-    _, preds = torch.max(outputs, 1)
-
-    fig, axes = plt.subplots(1, num_images, figsize=(12, 3))
-    for idx in range(num_images):
-        ax = axes[idx]
-        img = images[idx].squeeze().numpy()
-        ax.imshow(img, cmap='gray')
-        ax.axis('off')
-        ax.set_title(f"True: {class_names[labels[idx]]}\nPred: {class_names[preds[idx]]}")
-    st.pyplot(fig)
+    st.markdown("Happy Learning! 🚀")
 
 if __name__ == "__main__":
     main()
