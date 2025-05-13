@@ -37,7 +37,10 @@ This interactive application helps you visualize and understand key machine lear
 - Make sure your virtual environment is activated (if you created one)
 - Launch the Streamlit application:
     ```bash
-    streamlit run app.py
+    streamlit run Home.py
+
+## Library Exclude
+- I excluded the torch, if you already have torch, I recommended to use that environment and just install streamlit
 
 ## Navigate through the different pages using the sidebar:
 - ANN Basics
