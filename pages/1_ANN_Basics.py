@@ -16,7 +16,7 @@ import time
 # Set Streamlit's page configuration (including layout and wide mode)
 st.set_page_config(layout="wide")
 
-# 1. First, fix the dataset generation function to create more separated classes
+# Generate dataset
 def generate_classification_data(n_samples=200, n_features=2, n_classes=2, random_state=42):
     n_informative = min(n_features, 2)  # Ensure n_informative doesn't exceed n_features
     X, y = make_classification(
@@ -56,7 +56,7 @@ class SimpleNN(nn.Module):
         # Apply regularization
         if regularization == 'L1':
             self.regularization = nn.L1Loss()
-        else:  # L2 regularization
+        else: 
             self.regularization = nn.MSELoss()
 
         self.model = nn.Sequential(*self.layers)
@@ -276,8 +276,6 @@ def main():
     # Creating three columns for the layout
     col1, col2, col3 = st.columns([2, 3, 2])
 
-    # Column 1: Generate Dataset and Show Code
-    # In Column 1 section
     with col1:
         st.subheader("Generate Dataset")
         
@@ -358,8 +356,7 @@ def main():
         nn_fig = plot_neural_network(input_dim=2, hidden_layers=active_layers)
         st.pyplot(nn_fig)
         plt.close(nn_fig)  # Close to prevent memory leaks
-    # Column 3: Dataset Visualization and Training
-    # Column 3: Dataset Visualization and Training
+
     # In your Column 3 section:
     with col3:
         # Get data from session state
